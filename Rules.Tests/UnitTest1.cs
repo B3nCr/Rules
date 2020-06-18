@@ -50,15 +50,16 @@ namespace Rules.Tests
         public void Test()
         {
             var commercialInvoice = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.CommercialInvoice);
-            var noDocument = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.NoDocument);
+            var noDocument = new CountryToZoneRule(from: "GB", to: "Non-Matching-Zone", requiresDoc: DocumentType.NoDocument);
             var cn22 = new CountryToCountryRule(from: "GB", to: "FR", requiresDoc: DocumentType.CN22);
 
             var rulesEngine = new RulesEngine(commercialInvoice, noDocument, cn22);
 
             var result = rulesEngine.Run(from: "GB", to: "FR", value: 100.10m);
 
-            Assert.Single(result);
+            Assert.Equal(2, result.Count());
             Assert.Contains(DocumentType.CN22, result);
+            Assert.Contains(DocumentType.CommercialInvoice, result);
         }
 
         [Fact]

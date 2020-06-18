@@ -18,7 +18,7 @@ namespace Rules.Tests
 
             foreach (var rule in rules)
             {
-                if (rule.RequiresDoc == DocumentType.NoDocument)
+                if (rule.Applies(from, to, value) && rule.RequiresDoc == DocumentType.NoDocument)
                 {
                     result.Clear();
                 }

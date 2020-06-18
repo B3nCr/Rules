@@ -18,11 +18,11 @@ namespace Rules.Tests
                 return false;
             }
 
-            if(!_zones[To].Contains(to)) 
+            if(!_zones.ZoneContainsCountry(To, to)) 
             {
                 return false;
             }
-
+            
             return base.Applies(from, to, shipmentValue);
         }
     }
@@ -32,6 +32,16 @@ namespace Rules.Tests
         public Zones ()
         {
             this.Add("EU", new HashSet<string>() { "DK", "FR", "GE" });
+        }
+
+        public bool ZoneContainsCountry(string zone, string country) 
+        {
+            if(!this.ContainsKey(zone))
+            {
+                return false;
+            }
+            
+            return this[zone].Contains(country);
         }
     }
 }

@@ -19,5 +19,7 @@ namespace Rules.Tests
             : base(from, to, requiresDoc, min, max)
         {
         }
+
+        public override int Specificity => 100;
     }
 }

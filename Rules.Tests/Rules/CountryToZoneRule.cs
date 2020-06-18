@@ -14,6 +14,8 @@ namespace Rules.Tests
             _countries = countries;
         }
 
+        public override int Specificity => 200;
+
         internal override bool Applies(string from, string to, decimal shipmentValue)
         {
             if (!from.Equals(From))
@@ -28,17 +30,5 @@ namespace Rules.Tests
 
             return base.Applies(from, to, shipmentValue);
         }
-    }
-
-    public static class ZoneRepo
-    {
-        static ZoneRepo()
-        {
-            Zones = new Dictionary<string, HashSet<string>>();
-            Zones.Add("EU", new HashSet<string>() { "DK", "FR", "GE" });
-            Zones.Add("Non-Matching-Zone", new HashSet<string>());
-        }
-
-        public static Dictionary<string, HashSet<string>> Zones { get; }
     }
 }

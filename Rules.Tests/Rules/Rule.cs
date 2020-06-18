@@ -19,6 +19,8 @@ namespace Rules.Tests
         public decimal Min { get; }
         public decimal Max { get; }
 
+        public abstract int Specificity {get;}
+
         internal virtual bool Applies(string from, string to, decimal shipmentValue)
         {
             return  shipmentValue > Min && shipmentValue < Max;

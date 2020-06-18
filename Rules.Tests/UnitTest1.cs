@@ -34,8 +34,8 @@ namespace Rules.Tests
         [Fact]
         public void NoDocumentAppliesOnlyToLessSpecificRules()
         {
-            var commercialInvoice = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.CommercialInvoice);
-            var noDocument = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.NoDocument);
+            var commercialInvoice = new CountryToZoneRule(from: "GB", to: "EU", countries: ZoneRepo.Zones["EU"], requiresDoc: DocumentType.CommercialInvoice);
+            var noDocument = new CountryToZoneRule(from: "GB", to: "EU", countries: ZoneRepo.Zones["EU"], requiresDoc: DocumentType.NoDocument);
             var cn22 = new CountryToCountryRule(from: "GB", to: "FR", requiresDoc: DocumentType.CN22);
 
             var rulesEngine = new RulesEngine(commercialInvoice, noDocument, cn22);
@@ -47,10 +47,10 @@ namespace Rules.Tests
         }
 
         [Fact]
-        public void Test()
+        public void IgnoreCountryToZoneNoDocumentWhichDoesNotApply()
         {
-            var commercialInvoice = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.CommercialInvoice);
-            var noDocument = new CountryToZoneRule(from: "GB", to: "Non-Matching-Zone", requiresDoc: DocumentType.NoDocument);
+            var commercialInvoice = new CountryToZoneRule(from: "GB", to: "EU", countries: ZoneRepo.Zones["EU"], requiresDoc: DocumentType.CommercialInvoice);
+            var noDocument = new CountryToZoneRule(from: "GB", to: "Non-Matching-Zone", countries: ZoneRepo.Zones["Non-Matching-Zone"], requiresDoc: DocumentType.NoDocument);
             var cn22 = new CountryToCountryRule(from: "GB", to: "FR", requiresDoc: DocumentType.CN22);
 
             var rulesEngine = new RulesEngine(commercialInvoice, noDocument, cn22);
@@ -65,7 +65,7 @@ namespace Rules.Tests
         [Fact]
         public void DestinationNotInZoneCoveredByRules()
         {
-            var rule = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.CommercialInvoice);
+            var rule = new CountryToZoneRule(from: "GB", to: "EU", countries: ZoneRepo.Zones["EU"], requiresDoc: DocumentType.CommercialInvoice);
 
             var rulesEngine = new RulesEngine(rule);
 
@@ -73,11 +73,11 @@ namespace Rules.Tests
 
             Assert.Empty(result);
         }
-        
+
         [Fact]
         public void OneCountryToZoneRule()
         {
-            var rule = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.CommercialInvoice);
+            var rule = new CountryToZoneRule(from: "GB", to: "EU", countries: ZoneRepo.Zones["EU"], requiresDoc: DocumentType.CommercialInvoice);
 
             var rulesEngine = new RulesEngine(rule);
 
@@ -90,9 +90,9 @@ namespace Rules.Tests
         [Fact]
         public void TwoCountryToZoneRules()
         {
-            var invoice = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.CommercialInvoice);
+            var invoice = new CountryToZoneRule(from: "GB", to: "EU", countries: ZoneRepo.Zones["EU"], requiresDoc: DocumentType.CommercialInvoice);
 
-            var cn22 = new CountryToZoneRule(from: "GB", to: "EU", requiresDoc: DocumentType.CN22);
+            var cn22 = new CountryToZoneRule(from: "GB", to: "EU", countries: ZoneRepo.Zones["EU"], requiresDoc: DocumentType.CN22);
 
             var rulesEngine = new RulesEngine(invoice, cn22);
 
@@ -106,7 +106,7 @@ namespace Rules.Tests
         [Fact]
         public void TestRuleValue()
         {
-            var rule = new ValueTestRule("GB", "EU", DocumentType.CN22, 0m, 100m);
+            var rule = new ValueTestRule("GB", "Irrelevant", DocumentType.CN22, 0m, 100m);
 
             var rulesEngine = new RulesEngine(rule);
 

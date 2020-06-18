@@ -4,11 +4,12 @@ namespace Rules.Tests
 {
     internal class CountryToZoneRule : Rule
     {
-        private Zones _zones = new Zones();
+        private HashSet<string> _countries;
 
-        public CountryToZoneRule(string from, string to, DocumentType requiresDoc)
+        public CountryToZoneRule(string from, string to, HashSet<string> countries, DocumentType requiresDoc)
             : base(from, to, requiresDoc, 0m, decimal.MaxValue)
         {
+            _countries = countries;
         }
 
         internal override bool Applies(string from, string to, decimal shipmentValue)
@@ -18,30 +19,24 @@ namespace Rules.Tests
                 return false;
             }
 
-            if(!_zones.ZoneContainsCountry(To, to)) 
+            if (!_countries.Contains(to))
             {
                 return false;
             }
-            
+
             return base.Applies(from, to, shipmentValue);
         }
     }
 
-    public class Zones : Dictionary<string, HashSet<string>>
+    public static class ZoneRepo
     {
-        public Zones ()
+        static ZoneRepo()
         {
-            this.Add("EU", new HashSet<string>() { "DK", "FR", "GE" });
+            Zones = new Dictionary<string, HashSet<string>>();
+            Zones.Add("EU", new HashSet<string>() { "DK", "FR", "GE" });
+            Zones.Add("Non-Matching-Zone", new HashSet<string>());
         }
 
-        public bool ZoneContainsCountry(string zone, string country) 
-        {
-            if(!this.ContainsKey(zone))
-            {
-                return false;
-            }
-            
-            return this[zone].Contains(country);
-        }
+        public static Dictionary<string, HashSet<string>> Zones { get; }
     }
 }

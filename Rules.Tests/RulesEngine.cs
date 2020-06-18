@@ -22,7 +22,7 @@ namespace Rules.Tests
                 {
                     result.Clear();
                 }
-                else if (rule.Applies(value))
+                else if (rule.Applies(from, to, value))
                 {
                     result.Add(rule.RequiresDoc);
                 }

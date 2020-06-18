@@ -1,10 +1,10 @@
-using System;
+﻿using System;
 using System.Linq;
 using Xunit;
 
 namespace Rules.Tests
 {
-    public class CountryToZoneTest
+    public class RulesEngineTests
     {
         [Fact]
         public void OneCountryToCountryRule()

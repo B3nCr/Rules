@@ -6,6 +6,8 @@ namespace Rules.Tests
     {
         private HashSet<string> _countries;
 
+        private Rule next;
+
         public CountryToZoneRule(string from, string to, HashSet<string> countries, DocumentType requiresDoc)
             : base(from, to, requiresDoc, 0m, decimal.MaxValue)
         {
